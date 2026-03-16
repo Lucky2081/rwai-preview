@@ -1535,7 +1535,7 @@ desktop: > 1024px
 ## 14. 参考资源
 
 **原始网站**：
-- GitHub: https://github.com/THU-ZJAI/Real-World-AI
+- GitHub: https://github.com/THU-ZJAI/Real-World-AI_Source
 - 实站: https://rwai.org
 
 **关键文档**（原始代码库中）：

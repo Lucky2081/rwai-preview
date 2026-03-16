@@ -74,7 +74,7 @@ export function Header() {
 
           {/* GitHub Link */}
           <a
-            href="https://github.com/THU-ZJAI/Real-World-AI"
+            href="https://github.com/THU-ZJAI/Real-World-AI_Source"
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
@@ -127,7 +127,7 @@ export function Header() {
                 {locale === 'en' ? '中文' : 'EN'}
               </button>
               <a
-                href="https://github.com/THU-ZJAI/Real-World-AI"
+                href="https://github.com/THU-ZJAI/Real-World-AI_Source"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-base font-medium text-text-secondary hover:text-text-primary"

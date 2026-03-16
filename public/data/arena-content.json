@@ -2964,6 +2964,12 @@
             "title": "2. 基本信息",
             "subsections": [
               {
+                "title": "2.1 概况",
+                "content": [
+                  "**业务背景**: 产业链图谱是产业规划、招商引 - 资、风险管控的核心工具，但传统构建模式面临周期长、数据分散、更新滞后等问题，难以适配全国范围的复杂产业生态分析需求。本案例融合知识图谱框架、低代码开发平台与多源数据接口，通过模板化配置、自动信息抽取、人机协同校验，7 天内即可完成单条全国产业链的节点梳理、关系构建、可视化呈现与分析报告生成，覆盖 2.3 亿 + 数字化工业品、千万家 + 核心企业数据，适配新能源、高端制造、电子信息等多类产业场景。"
+                ]
+              },
+              {
                 "title": "2.2 分类标签",
                 "content": [
                   "**行业类别**: 金融贸易，能源制造",
@@ -3084,6 +3090,12 @@
           {
             "title": "2. Basic Information",
             "subsections": [
+              {
+                "title": "2.1 Overview",
+                "content": [
+                  "**Business Background**: Industrial chain graphs are core tools for industrial planning, investment attraction, and risk control, but traditional construction methods face long cycles, fragmented data, and delayed updates, making them hard to adapt to complex nationwide industrial ecosystem analysis. This case combines a knowledge graph framework, a low-code development platform, and multi-source data interfaces. Through template-based configuration, automated information extraction, and human-in-the-loop validation, it can complete node mapping, relationship construction, visualization, and analysis report generation for a single nationwide industrial chain within 7 days, covering more than 230 million digital industrial products and tens of millions of core enterprise records, and supporting scenarios across new energy, high-end manufacturing, electronic information, and more."
+                ]
+              },
               {
                 "title": "2.2 Classification Tags",
                 "content": [
@@ -10164,6 +10176,13 @@
             "title": "2. 基本信息",
             "subsections": [
               {
+                "title": "2.1 概况",
+                "content": [
+                  "**业务背景**: 金融机构的授信、投融资等业务中，一个项目通常涉及贷款合同、保证合同、抵押合同、公司章程等多类型法律文件。法审人员需要对多个合同之间的关键信息进行一致性、合规性与完整性核查，工作强度大、专业要求高，且在高负载下人工审核难以保证稳定准确率。",
+                  "**解决方案**: 本擂台聚焦“项目级多合同法审”这一典型高价值场景，任务定义为： 输入为同一项目下的多份合同及相关佐证材料 输出为结构化的审核结果与风险点定位说明 核心关注点：审核效率、准确性、规则可复用性以及人机协作下的可控性"
+                ]
+              },
+              {
                 "title": "2.2 分类标签",
                 "content": [
                   "**行业类别**: 金融贸易",
@@ -10283,6 +10302,13 @@
           {
             "title": "2. Basic Information",
             "subsections": [
+              {
+                "title": "2.1 Overview",
+                "content": [
+                  "**Business Background**: In credit, investment, and financing businesses at financial institutions, a single project often involves multiple types of legal documents, such as loan agreements, guarantee agreements, mortgage agreements, and articles of association. Legal reviewers must verify the consistency, compliance, and completeness of key information across multiple contracts. The workload is heavy, the professional bar is high, and under high workloads manual review struggles to maintain stable accuracy.",
+                  "**Solution**: This arena focuses on the typical high-value scenario of project-level multi-contract legal review. The task is defined as follows: the input is multiple contracts and related supporting materials under the same project; the output is structured review results and explanations locating risk points. The core concerns are review efficiency, accuracy, rule reusability, and controllability under human-AI collaboration."
+                ]
+              },
               {
                 "title": "2.2 Classification Tags",
                 "content": [

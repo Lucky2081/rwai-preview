@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { ParticlesBackground } from '@/components/effects/particles-background';
 import { ParticleNebulaBackground } from '@/components/effects/particle-nebula-background';
 import { FeaturedArenasShowcase, FeaturedArenasShowcaseSkeleton } from '@/components/featured-arenas-showcase';
-import { getAllArenasFromStaticData } from '@/lib/static-data';
+import { getAllArenasFromStaticData, getHomepageDisplayArenaIdsFromStaticData } from '@/lib/static-data';
 
 // Helper function to get localized labels (fallback to content files for consistency)
 function getLabel(locale: string, key: string): string {
@@ -548,18 +548,12 @@ async function FeaturedArenasSection({ locale }: { locale: string }) {
   }
   const parsed = parseHomepageSectionContent(contentFile.content);
 
-  // Read configuration from markdown
-  const arenaIdsStr = parsed['Arena IDs'] || '';
-
   const arenas = await getAllArenasFromStaticData();
-
-  // Parse arena IDs
-  const arenaIds = arenaIdsStr.split(',').map((id: string) => id.trim()).filter((id: string) => id);
-
-  // Filter arenas by IDs (check both id and folderId for backwards compatibility)
-  const featuredArenas = arenaIds.length > 0
-    ? arenas.filter(arena => arenaIds.includes(arena.id) || arenaIds.includes(arena.folderId))
-    : arenas.slice(0, 3);
+  const homepageDisplayArenaIds = await getHomepageDisplayArenaIdsFromStaticData();
+  const arenaById = new Map(arenas.map((arena) => [arena.id, arena]));
+  const featuredArenas = homepageDisplayArenaIds
+    .map((arenaId) => arenaById.get(arenaId))
+    .filter((arena): arena is Arena => Boolean(arena));
 
   const title = parsed['Title'];
   const subtitle = parsed['Subtitle'];
@@ -791,7 +785,7 @@ async function FinalCtaSection({ locale }: { locale: string }) {
             <Link href={`/${locale}/arena`}>{primaryButton}</Link>
           </Button>
           <Button size="large" variant="secondary" className="border-white text-white hover:bg-white/10" asChild>
-            <a href="https://github.com/THU-ZJAI/Real-World-AI" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/THU-ZJAI/Real-World-AI_Source" target="_blank" rel="noopener noreferrer">
               {secondaryButton}
             </a>
           </Button>

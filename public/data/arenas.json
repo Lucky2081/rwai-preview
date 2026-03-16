@@ -23,7 +23,9 @@
       "security": "较高",
       "cost": "较优"
     },
-    "videoUrl": "https://rwai-dev.oss-cn-shanghai.aliyuncs.com/1.mov",
+    "videoUrlZh": "https://www.bilibili.com/video/BV1FxFYzyEk8",
+    "videoUrlGlobal": "https://www.bilibili.com/video/BV1FxFYzyEk8",
+    "videoCoverImageUrl": "https://rwai-dev.oss-cn-shanghai.aliyuncs.com/1.JPG",
     "hasContent": true
   },
   {
@@ -50,7 +52,9 @@
       "security": "较低",
       "cost": "较优"
     },
-    "videoUrl": "https://rwai-dev.oss-cn-shanghai.aliyuncs.com/2.mp4",
+    "videoUrlZh": "https://rwai-dev.oss-cn-shanghai.aliyuncs.com/2.mp4",
+    "videoUrlGlobal": "https://rwai-dev.oss-cn-shanghai.aliyuncs.com/2.mp4",
+    "videoCoverImageUrl": "https://rwai-dev.oss-cn-shanghai.aliyuncs.com/2.JPG",
     "hasContent": true
   },
   {
@@ -77,6 +81,7 @@
       "security": "较高",
       "cost": "较优"
     },
+    "videoUrlGlobal": "https://www.youtube.com/watch?v=gqsZGxuymTk",
     "hasContent": true
   },
   {

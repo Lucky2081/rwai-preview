@@ -192,7 +192,7 @@ export default async function FAQPage({
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              href={`https://github.com/THU-ZJAI/Real-World-AI`}
+              href={`https://github.com/THU-ZJAI/Real-World-AI_Source`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 h-11 px-6 text-base font-medium transition-all duration-fast border-2 border-gray-200 bg-transparent text-gray-900 hover:bg-gray-50 hover:border-gray-300 rounded-button"

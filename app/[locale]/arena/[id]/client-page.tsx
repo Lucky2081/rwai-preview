@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, useEffect, type ReactNode } from 'react';
+import { useState, useEffect, useRef, type ReactNode } from 'react';
 import Link from 'next/link';
 import { Arena } from '@/lib/types';
+import { VideoPlayOverlay } from '@/components/ui/video-play-overlay';
+import { getBilibiliEmbedUrl, getYouTubeEmbedUrl, isBilibiliUrl, isYouTubeUrl } from '@/lib/video-platform';
 import {
   BarChart3,
   ArrowLeft,
@@ -260,8 +262,19 @@ function isTabContentReady(content?: ArenaTabContent): boolean {
 
 export function ArenaDetailClient({ arena, locale, arenaId: _arenaId, initialContent, hasContent }: ArenaDetailClientProps) {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
+  const [isVideoActivated, setIsVideoActivated] = useState(false);
+  const [videoLoading, setVideoLoading] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const content = initialContent;
   const isChina = locale === 'zh';
+  const isVerified = arena.verificationStatus === '已验证';
+  const statusLabel = isVerified
+    ? (isChina ? '已验证' : 'Verified')
+    : (isChina ? '验证中' : 'In Verification');
+  const statusBadgeClassName = isVerified
+    ? 'bg-amber-50 text-amber-700 ring-amber-600/20'
+    : 'bg-amber-50/50 text-amber-700/70 ring-amber-600/10';
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
   const withBasePath = (path: string) => `${basePath}${path}`;
   const hasArenaSnapshot =
@@ -312,7 +325,43 @@ export function ArenaDetailClient({ arena, locale, arenaId: _arenaId, initialCon
     cost: arena.metrics?.cost || '较优',
     security: arena.metrics?.security || '较高',
   };
-  const hasVideo = Boolean((arena.videoUrl || '').trim());
+  const videoUrl = (isChina ? (arena.videoUrlZh || '') : (arena.videoUrlGlobal || '')).trim();
+  const videoCoverImageUrl = (arena.videoCoverImageUrl || '').trim();
+  const hasVideo = Boolean(videoUrl);
+  const isBilibiliVideo = hasVideo && isBilibiliUrl(videoUrl);
+  const isYouTubeVideo = hasVideo && isYouTubeUrl(videoUrl);
+  const bilibiliEmbedUrl = isBilibiliVideo ? getBilibiliEmbedUrl(videoUrl) : null;
+  const youTubeEmbedUrl = isYouTubeVideo ? getYouTubeEmbedUrl(videoUrl) : null;
+
+  useEffect(() => {
+    if (!hasVideo || !isVideoActivated) {
+      return;
+    }
+
+    const videoEl = videoRef.current;
+    if (!videoEl) {
+      return;
+    }
+
+    videoEl.muted = true;
+    videoEl.load();
+    const playPromise = videoEl.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => {
+        setVideoLoading(false);
+      });
+    }
+  }, [hasVideo, isVideoActivated]);
+
+  const activateVideoPlayback = () => {
+    if (!hasVideo || isBilibiliVideo || isYouTubeVideo) {
+      return;
+    }
+
+    setVideoError(false);
+    setVideoLoading(true);
+    setIsVideoActivated(true);
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -348,15 +397,15 @@ export function ArenaDetailClient({ arena, locale, arenaId: _arenaId, initialCon
               <div className="lg:col-span-2 flex flex-col justify-between">
                 {/* Title with inline status badges */}
                 <div className="mb-4">
-                  <div className="flex flex-wrap items-center gap-3 mb-3">
+                  <div className="mb-3">
                     <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900">
                       {arena.title[locale as keyof typeof arena.title] || arena.title.zh}
                     </h1>
-                    {/* Status and Contact Badges - Inline with title */}
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-sm font-semibold text-amber-700 ring-1 ring-inset ring-amber-600/20">
-                        <Trophy className="h-3.5 w-3.5 mr-1" />
-                        {locale === 'zh' ? '已验证' : 'Verified'}
+                    {/* Status and Contact Badges */}
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
+                      <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold ring-1 ring-inset ${statusBadgeClassName}`}>
+                        <Trophy className={`h-3.5 w-3.5 mr-1 ${isVerified ? '' : 'opacity-70'}`} />
+                        {statusLabel}
                       </span>
                       <Link
                         href={'/' + locale + '/about'}
@@ -370,7 +419,7 @@ export function ArenaDetailClient({ arena, locale, arenaId: _arenaId, initialCon
 
                   {/* Champion/擂主 Info */}
                   {(locale === 'zh' ? arena.champion : arena.championEn) && (
-                    <div className="mb-2 inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-100">
+                    <div className="mb-2 flex w-full items-start gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-100">
                       <Trophy className="h-4 w-4 text-purple-600 flex-shrink-0" />
                       <span className="font-semibold text-purple-900 text-sm">
                         {locale === 'zh' ? '擂主' : 'Champion'}:
@@ -383,7 +432,7 @@ export function ArenaDetailClient({ arena, locale, arenaId: _arenaId, initialCon
                   {(() => {
                     const challenger = locale === 'zh' ? arena.challenger : arena.challengerEn;
                     return challenger && challenger.trim() !== '' ? (
-                      <div className="mb-3 inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-50/50 to-blue-50/50 rounded-lg border border-purple-100/60">
+                      <div className="mb-3 flex w-full items-start gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-50/50 to-blue-50/50 rounded-lg border border-purple-100/60">
                         <Trophy className="h-4 w-4 text-purple-400 flex-shrink-0" />
                         <span className="font-semibold text-purple-700 text-sm">
                           {locale === 'zh' ? '攻擂中' : 'Challenger'}:
@@ -448,17 +497,102 @@ export function ArenaDetailClient({ arena, locale, arenaId: _arenaId, initialCon
               <div className="lg:col-span-3">
                 <div className="relative h-[300px] rounded-2xl overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-2xl border border-slate-700/50">
                   {hasVideo ? (
-                    <video
-                      className="w-full h-full object-contain"
-                      controls
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                    >
-                      <source src={arena.videoUrl} type="video/mp4" />
-                      {locale === 'zh' ? '您的浏览器不支持视频播放' : 'Your browser does not support the video tag.'}
-                    </video>
+                    videoError ? (
+                      <div className="w-full h-full bg-black flex items-center justify-center text-white p-8">
+                        <div className="text-center">
+                          <svg className="w-16 h-16 mx-auto mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                          <p className="text-lg mb-2">
+                            {locale === 'zh' ? '视频加载失败' : 'Video Failed to Load'}
+                          </p>
+                          <p className="text-sm text-gray-400">{locale === 'zh' ? '演示视频正在准备中' : 'Demo video coming soon'}</p>
+                        </div>
+                      </div>
+                    ) : isBilibiliVideo ? (
+                      bilibiliEmbedUrl ? (
+                        <iframe
+                          src={bilibiliEmbedUrl}
+                          className="w-full h-full"
+                          allow="autoplay; fullscreen"
+                          allowFullScreen
+                          loading="lazy"
+                          referrerPolicy="strict-origin-when-cross-origin"
+                          title={locale === 'zh' ? '哔哩哔哩视频' : 'Bilibili video'}
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-black flex items-center justify-center text-white p-8">
+                          <div className="text-center">
+                            <p className="text-lg mb-2">
+                              {locale === 'zh' ? 'Bilibili 链接格式暂不支持' : 'Unsupported Bilibili URL format'}
+                            </p>
+                            <p className="text-sm text-gray-400">
+                              {locale === 'zh' ? '请使用 bilibili.com/video/BV... 链接' : 'Please use a bilibili.com/video/BV... link'}
+                            </p>
+                          </div>
+                        </div>
+                      )
+                    ) : isYouTubeVideo ? (
+                      youTubeEmbedUrl ? (
+                        <iframe
+                          src={youTubeEmbedUrl}
+                          className="w-full h-full"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                          allowFullScreen
+                          loading="lazy"
+                          referrerPolicy="strict-origin-when-cross-origin"
+                          title={locale === 'zh' ? 'YouTube 视频' : 'YouTube video'}
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-black flex items-center justify-center text-white p-8">
+                          <div className="text-center">
+                            <p className="text-lg mb-2">
+                              {locale === 'zh' ? 'YouTube 链接格式暂不支持' : 'Unsupported YouTube URL format'}
+                            </p>
+                            <p className="text-sm text-gray-400">
+                              {locale === 'zh' ? '请使用 youtube.com/watch?v=... 或 youtu.be/... 链接' : 'Please use a youtube.com/watch?v=... or youtu.be/... link'}
+                            </p>
+                          </div>
+                        </div>
+                      )
+                    ) : !isVideoActivated ? (
+                      <VideoPlayOverlay
+                        className="h-full"
+                        coverImageUrl={videoCoverImageUrl}
+                        coverAlt={locale === 'zh' ? '视频封面' : 'Video cover'}
+                        ariaLabel={locale === 'zh' ? '播放演示视频' : 'Play demo video'}
+                        onClick={activateVideoPlayback}
+                      />
+                    ) : (
+                      <video
+                        ref={videoRef}
+                        className="w-full h-full object-contain"
+                        controls
+                        muted
+                        preload="none"
+                        playsInline
+                        onError={() => {
+                          setVideoError(true);
+                          setVideoLoading(false);
+                        }}
+                        onPlaying={() => {
+                          setVideoLoading(false);
+                        }}
+                        onLoadedMetadata={() => {
+                          setVideoLoading(false);
+                        }}
+                        onCanPlay={() => {
+                          setVideoError(false);
+                          setVideoLoading(false);
+                        }}
+                        onLoadedData={() => {
+                          setVideoLoading(false);
+                        }}
+                      >
+                        {isVideoActivated ? <source src={videoUrl} type="video/mp4" /> : null}
+                        {locale === 'zh' ? '您的浏览器不支持视频播放' : 'Your browser does not support the video tag.'}
+                      </video>
+                    )
                   ) : (
                     <div className="relative w-full h-full overflow-hidden bg-gradient-to-br from-[#07142d] via-[#0a2651] to-[#192f67]">
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_18%,rgba(139,180,255,0.18),transparent_44%),radial-gradient(circle_at_78%_76%,rgba(132,116,255,0.14),transparent_46%)]" />
@@ -483,6 +617,14 @@ export function ArenaDetailClient({ arena, locale, arenaId: _arenaId, initialCon
                       </div>
                     </div>
                   )}
+                  {videoLoading && !videoError && hasVideo && isVideoActivated && !isBilibiliVideo && !isYouTubeVideo ? (
+                    <div className="absolute inset-0 bg-black/45 flex items-center justify-center">
+                      <div className="text-white text-center">
+                        <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin mx-auto mb-3"></div>
+                        <p className="text-sm">{locale === 'zh' ? '视频加载中...' : 'Loading video...'}</p>
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>

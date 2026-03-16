@@ -549,7 +549,7 @@ export const metadata: Metadata = {
   "name": "RWAI Arena",
   "url": "https://rwai-arena.org",
   "sameAs": [
-    "https://github.com/THU-ZJAI/Real-World-AI"
+    "https://github.com/THU-ZJAI/Real-World-AI_Source"
   ]
 }
 ```

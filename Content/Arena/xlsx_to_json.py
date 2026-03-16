@@ -32,11 +32,16 @@ ROW_FIELDS = [
     "security",
     "cost",
     "challenger",
-    "video_url",
+    "video_url_zh",
+    "video_url_global",
+    "video_cover_image_url",
+    "homepage_display_order",
 ]
-ZH_JSON_FIELDS = [field for field in ROW_FIELDS if field != "video_url"]
+ZH_JSON_FIELDS = [
+    field for field in ROW_FIELDS if field not in {"video_url_zh", "video_url_global", "video_cover_image_url", "homepage_display_order"}
+]
 
-# V1: 列 B~M (索引 1~12)
+# V1（历史）：列 B~P（索引 1~15），老格式可能只有单列视频链接
 XLSX_COLS_V1 = {
     "arena_no": 1,
     "title": 2,
@@ -50,10 +55,13 @@ XLSX_COLS_V1 = {
     "security": 10,
     "cost": 11,
     "challenger": 12,
-    "video_url": 13,
+    "video_url_zh": 13,
+    "video_url_global": 14,
+    "video_cover_image_url": 15,
+    "homepage_display_order": 16,
 }
 
-# V2: 列 A~M (索引 0~12)
+# V2（当前）：列 A~P（索引 0~15）
 XLSX_COLS_V2 = {
     "arena_no": 0,
     "title": 1,
@@ -67,7 +75,29 @@ XLSX_COLS_V2 = {
     "security": 9,
     "cost": 10,
     "challenger": 11,
-    "video_url": 12,
+    "video_url_zh": 12,
+    "video_url_global": 13,
+    "video_cover_image_url": 14,
+    "homepage_display_order": 15,
+}
+
+HEADER_ALIASES: dict[str, tuple[str, ...]] = {
+    "arena_no": ("擂台编号",),
+    "title": ("擂台名称",),
+    "champion": ("本周擂主",),
+    "verification_status": ("验证状态",),
+    "highlights": ("亮点",),
+    "industry": ("行业类别",),
+    "category": ("应用类别",),
+    "speed": ("速度",),
+    "quality": ("质量",),
+    "security": ("安全",),
+    "cost": ("成本",),
+    "challenger": ("攻擂中",),
+    "video_url_zh": ("国内视频链接", "视频链接"),
+    "video_url_global": ("国际视频链接", "海外视频链接"),
+    "video_cover_image_url": ("视频封面图片链接", "视频封面链接"),
+    "homepage_display_order": ("首页展示顺序",),
 }
 
 
@@ -235,6 +265,28 @@ def clean_value(value: str) -> str:
     return text
 
 
+def find_header_col_map(rows: list[list[str]]) -> dict[str, int]:
+    for row in rows[:5]:
+        normalized_row = [clean_value(cell) for cell in row]
+        if "擂台编号" not in normalized_row:
+            continue
+
+        col_map: dict[str, int] = {}
+        for field, aliases in HEADER_ALIASES.items():
+            found_idx = None
+            for alias in aliases:
+                for idx, cell in enumerate(normalized_row):
+                    if cell == alias:
+                        found_idx = idx
+                        break
+                if found_idx is not None:
+                    break
+            if found_idx is not None:
+                col_map[field] = found_idx
+        return col_map
+    return {}
+
+
 def normalize_arena_no(text: str) -> str:
     value = clean_value(text)
     if value.isdigit():
@@ -248,13 +300,36 @@ def normalize_arena_no(text: str) -> str:
     return value
 
 
+def normalize_int_or_text(text: str) -> int | str | None:
+    value = clean_value(text)
+    if not value:
+        return None
+    if value.isdigit():
+        return int(value)
+    try:
+        f = float(value)
+        if math.isfinite(f) and f.is_integer():
+            return int(f)
+    except ValueError:
+        pass
+    return value
+
+
 def build_rows(rows: list[list[str]], version: str) -> list[dict[str, str]]:
     xlsx_cols = XLSX_COLS_V2 if version == "v2" else XLSX_COLS_V1
+    header_cols = find_header_col_map(rows)
+
+    def get_cell(row: list[str], key: str) -> str:
+        if key in header_cols:
+            idx = header_cols[key]
+            return row[idx] if len(row) > idx else ""
+        idx = xlsx_cols[key]
+        return row[idx] if len(row) > idx else ""
 
     result: list[dict[str, str]] = []
     for row in rows:
-        arena_no = normalize_arena_no(row[xlsx_cols["arena_no"]] if len(row) > xlsx_cols["arena_no"] else "")
-        title = clean_value(row[xlsx_cols["title"]] if len(row) > xlsx_cols["title"] else "")
+        arena_no = normalize_arena_no(get_cell(row, "arena_no"))
+        title = clean_value(get_cell(row, "title"))
 
         if not arena_no or not arena_no.isdigit():
             continue
@@ -263,24 +338,36 @@ def build_rows(rows: list[list[str]], version: str) -> list[dict[str, str]]:
 
         item: dict[str, str] = {}
         for key in ROW_FIELDS:
-            idx = xlsx_cols[key]
-            item[key] = clean_value(row[idx] if len(row) > idx else "")
+            item[key] = clean_value(get_cell(row, key))
+
+        # 兼容旧表：只有一个“视频链接”列时，补全另一列
+        if not item["video_url_zh"] and "video_url_zh" not in header_cols and "video_url_global" not in header_cols:
+            item["video_url_zh"] = clean_value(get_cell(row, "video_url_zh"))
+        if not item["video_url_global"] and "video_url_global" not in header_cols:
+            item["video_url_global"] = item["video_url_zh"]
+
         item["arena_no"] = arena_no
         result.append(item)
 
     return result
 
 
-def split_rows_for_outputs(rows: list[dict[str, str]]) -> tuple[list[dict[str, str]], list[dict[str, str | None]]]:
+def split_rows_for_outputs(rows: list[dict[str, str]]) -> tuple[list[dict[str, str]], list[dict[str, str | int | None]]]:
     zh_rows: list[dict[str, str]] = []
-    common_rows: list[dict[str, str | None]] = []
+    common_rows: list[dict[str, str | int | None]] = []
 
     for row in rows:
         zh_rows.append({key: row.get(key, "") for key in ZH_JSON_FIELDS})
-        video_url = clean_value(row.get("video_url", ""))
+        video_url_zh = clean_value(row.get("video_url_zh", ""))
+        video_url_global = clean_value(row.get("video_url_global", ""))
+        video_cover_image_url = clean_value(row.get("video_cover_image_url", ""))
+        homepage_display_order = normalize_int_or_text(row.get("homepage_display_order", ""))
         common_rows.append({
             "arena_no": row.get("arena_no", ""),
-            "video_url": video_url if video_url else None,
+            "video_url_zh": video_url_zh if video_url_zh else None,
+            "video_url_global": video_url_global if video_url_global else None,
+            "video_cover_image_url": video_cover_image_url if video_cover_image_url else None,
+            "homepage_display_order": homepage_display_order,
         })
 
     return zh_rows, common_rows

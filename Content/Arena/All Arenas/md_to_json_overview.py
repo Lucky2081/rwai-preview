@@ -34,6 +34,10 @@ BASIC_BLOCK_TITLES = {
     "其他价值回报",
 }
 
+BASIC_BLOCK_TITLE_ALIASES = {
+    "案例概况": "概况",
+}
+
 VERSION_INFO_GROUPS = {"实践者信息", "原作者信息", "关联引用", "版本状态"}
 
 
@@ -209,8 +213,9 @@ def parse_basic_info(section2: str) -> Dict[str, List[str]]:
             lines = split_lines_keep_blanks(cell)
             current = ""
             for line in lines:
-                if line in BASIC_BLOCK_TITLES:
-                    current = line
+                normalized_line = BASIC_BLOCK_TITLE_ALIASES.get(line, line)
+                if normalized_line in BASIC_BLOCK_TITLES:
+                    current = normalized_line
                     blocks.setdefault(current, [])
                 elif current:
                     blocks[current].append(line)

@@ -48,7 +48,7 @@ export function Footer() {
             <ul className="space-y-2">
               <li>
                 <a
-                  href="https://github.com/THU-ZJAI/Real-World-AI"
+                  href="https://github.com/THU-ZJAI/Real-World-AI_Source"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-text-secondary hover:text-primary transition-colors"
@@ -92,7 +92,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-text-secondary">{t('copyright')}</p>
           <a
-            href="https://github.com/THU-ZJAI/Real-World-AI"
+            href="https://github.com/THU-ZJAI/Real-World-AI_Source"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-text-secondary hover:text-primary transition-colors"

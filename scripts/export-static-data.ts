@@ -60,7 +60,9 @@ type ArenaRow = {
 
 type ArenaCommonRow = {
   arena_no?: string | number;
-  video_url?: string | null;
+  video_url_zh?: string | null;
+  video_url_global?: string | null;
+  video_cover_image_url?: string | null;
 };
 
 function ensureOutputDir() {
@@ -189,7 +191,9 @@ function buildArenasFromJson(): Arena[] {
         security: cleanText(row.security),
         cost: cleanText(row.cost),
       },
-      videoUrl: cleanText(commonRow?.video_url) || undefined,
+      videoUrlZh: cleanText(commonRow?.video_url_zh) || undefined,
+      videoUrlGlobal: cleanText(commonRow?.video_url_global) || undefined,
+      videoCoverImageUrl: cleanText(commonRow?.video_cover_image_url) || undefined,
       hasContent: hasArenaContent(folderId),
     };
 

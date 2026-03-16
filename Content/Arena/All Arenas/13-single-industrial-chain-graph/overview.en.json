@@ -23,6 +23,12 @@
       "title": "2. Basic Information",
       "subsections": [
         {
+          "title": "2.1 Overview",
+          "content": [
+            "**Business Background**: Industrial chain graphs are core tools for industrial planning, investment attraction, and risk control, but traditional construction methods face long cycles, fragmented data, and delayed updates, making them hard to adapt to complex nationwide industrial ecosystem analysis. This case combines a knowledge graph framework, a low-code development platform, and multi-source data interfaces. Through template-based configuration, automated information extraction, and human-in-the-loop validation, it can complete node mapping, relationship construction, visualization, and analysis report generation for a single nationwide industrial chain within 7 days, covering more than 230 million digital industrial products and tens of millions of core enterprise records, and supporting scenarios across new energy, high-end manufacturing, electronic information, and more."
+          ]
+        },
+        {
           "title": "2.2 Classification Tags",
           "content": [
             "**Industry**: Finance & Trade, Energy & Manufacturing",

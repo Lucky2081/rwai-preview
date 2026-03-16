@@ -8,7 +8,7 @@ export default function TermsOfServicePage() {
   const locale = useLocale();
   const isChina = locale === 'zh';
 
-  const lastUpdated = isChina ? '2025年1月30日' : 'January 30, 2025';
+  const lastUpdated = isChina ? '2026年1月30日' : 'January 30, 2026';
 
   return (
     <div className="w-full">
@@ -148,12 +148,12 @@ export default function TermsOfServicePage() {
                     {isChina ? '本项目遵循开源许可协议发布。您可以在许可协议允许的范围内使用、修改和分发代码。具体许可条款请参考：' : 'This project is released under an open-source license. You may use, modify, and distribute the code within the scope of the license. For specific license terms, please refer to:'}
                   </p>
                   <a
-                    href="https://github.com/THU-ZJAI/Real-World-AI"
+                    href="https://github.com/THU-ZJAI/Real-World-AI_Source"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:text-blue-700 font-medium"
                   >
-                    https://github.com/THU-ZJAI/Real-World-AI
+                    https://github.com/THU-ZJAI/Real-World-AI_Source
                   </a>
                 </div>
 
@@ -329,8 +329,8 @@ export default function TermsOfServicePage() {
           </p>
           <p className="text-sm text-slate-500">
             {isChina
-              ? '本条款最后更新于 2025年1月30日，并可能会不时更新。'
-              : 'These terms were last updated on January 30, 2025, and may be updated from time to time.'}
+              ? '本条款最后更新于 2026年1月30日，并可能会不时更新。'
+              : 'These terms were last updated on January 30, 2026, and may be updated from time to time.'}
           </p>
         </div>
       </section>

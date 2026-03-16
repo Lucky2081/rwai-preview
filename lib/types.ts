@@ -37,7 +37,9 @@ export interface Arena {
   metrics: Metrics;
   githubStars?: number; // GitHub stars count
   videoFile?: string;   // Video file name for featured arenas showcase
-  videoUrl?: string;    // Video URL from Content/Arena/page.common.json
+  videoUrlZh?: string;  // Video URL for zh locale
+  videoUrlGlobal?: string; // Video URL for non-zh locales
+  videoCoverImageUrl?: string; // Video cover image URL from Content/Arena/page.common.json
   hasContent?: boolean; // Whether the arena has full content files (overview, requirements, etc.)
 }
 

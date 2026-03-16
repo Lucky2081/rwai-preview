@@ -91,7 +91,7 @@
 **Chinese**: 如果您没有找到想要的答案，请随时联系我们。
 
 ### Contact Methods
-- **GitHub**: https://github.com/THU-ZJAI/Real-World-AI
+- **GitHub**: https://github.com/THU-ZJAI/Real-World-AI_Source
 - **Email**: xuyuyao@tsinghua-zj.edu.cn
 
 ---

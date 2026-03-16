@@ -23,6 +23,13 @@
       "title": "2. Basic Information",
       "subsections": [
         {
+          "title": "2.1 Overview",
+          "content": [
+            "**Business Background**: In credit, investment, and financing businesses at financial institutions, a single project often involves multiple types of legal documents, such as loan agreements, guarantee agreements, mortgage agreements, and articles of association. Legal reviewers must verify the consistency, compliance, and completeness of key information across multiple contracts. The workload is heavy, the professional bar is high, and under high workloads manual review struggles to maintain stable accuracy.",
+            "**Solution**: This arena focuses on the typical high-value scenario of project-level multi-contract legal review. The task is defined as follows: the input is multiple contracts and related supporting materials under the same project; the output is structured review results and explanations locating risk points. The core concerns are review efficiency, accuracy, rule reusability, and controllability under human-AI collaboration."
+          ]
+        },
+        {
           "title": "2.2 Classification Tags",
           "content": [
             "**Industry**: Finance & Trade",

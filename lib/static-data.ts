@@ -38,6 +38,7 @@ type ArenaRow = {
   arena_no?: string | number;
   title?: string;
   champion?: string;
+  related_references?: string;
   verification_status?: string;
   highlights?: string;
   industry?: string;
@@ -153,6 +154,8 @@ function buildArenasFromJson(): Arena[] {
       challengerEn: cleanText(enRow?.challenger),
       highlights: cleanText(row.highlights),
       highlightsEn: cleanText(enRow?.highlights),
+      relatedReferences: cleanText(row.related_references) || undefined,
+      relatedReferencesEn: cleanText(enRow?.related_references) || undefined,
       metrics: {
         speed: cleanText(row.speed),
         quality: cleanText(row.quality),

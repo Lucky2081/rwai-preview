@@ -34,6 +34,8 @@ export interface Arena {
   challengerEn: string;  // Challenger - 英文
   highlights: string;    // 亮点 - 中文
   highlightsEn: string;  // Highlights - 英文
+  relatedReferences?: string; // 关联引用 - 中文
+  relatedReferencesEn?: string; // Related references - 英文
   metrics: Metrics;
   githubStars?: number; // GitHub stars count
   videoFile?: string;   // Video file name for featured arenas showcase

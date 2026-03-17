@@ -367,6 +367,7 @@ export function FeaturedArenasShowcase({ arenas, locale, title, subtitle }: Feat
                     ref={videoRef}
                     className="w-full aspect-video object-contain bg-black"
                     controls
+                    loop={false}
                     muted
                     preload="none"
                     playsInline

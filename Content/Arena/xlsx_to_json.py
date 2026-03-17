@@ -23,6 +23,7 @@ ROW_FIELDS = [
     "arena_no",
     "title",
     "champion",
+    "related_references",
     "verification_status",
     "highlights",
     "industry",
@@ -41,11 +42,33 @@ ZH_JSON_FIELDS = [
     field for field in ROW_FIELDS if field not in {"video_url_zh", "video_url_global", "video_cover_image_url", "homepage_display_order"}
 ]
 
-# V1（历史）：列 B~P（索引 1~15），老格式可能只有单列视频链接
+# V1（历史）：列 B~Q（索引 1~16），含“关联引用”列
 XLSX_COLS_V1 = {
     "arena_no": 1,
     "title": 2,
     "champion": 3,
+    "related_references": 4,
+    "verification_status": 5,
+    "highlights": 6,
+    "industry": 7,
+    "category": 8,
+    "speed": 9,
+    "quality": 10,
+    "security": 11,
+    "cost": 12,
+    "challenger": 13,
+    "video_url_zh": 14,
+    "video_url_global": 15,
+    "video_cover_image_url": 16,
+    "homepage_display_order": 17,
+}
+
+# V2（当前）：列 A~Q（索引 0~16），D 列为“关联引用”
+XLSX_COLS_V2 = {
+    "arena_no": 0,
+    "title": 1,
+    "champion": 2,
+    "related_references": 3,
     "verification_status": 4,
     "highlights": 5,
     "industry": 6,
@@ -61,30 +84,11 @@ XLSX_COLS_V1 = {
     "homepage_display_order": 16,
 }
 
-# V2（当前）：列 A~P（索引 0~15）
-XLSX_COLS_V2 = {
-    "arena_no": 0,
-    "title": 1,
-    "champion": 2,
-    "verification_status": 3,
-    "highlights": 4,
-    "industry": 5,
-    "category": 6,
-    "speed": 7,
-    "quality": 8,
-    "security": 9,
-    "cost": 10,
-    "challenger": 11,
-    "video_url_zh": 12,
-    "video_url_global": 13,
-    "video_cover_image_url": 14,
-    "homepage_display_order": 15,
-}
-
 HEADER_ALIASES: dict[str, tuple[str, ...]] = {
     "arena_no": ("擂台编号",),
     "title": ("擂台名称",),
     "champion": ("本周擂主",),
+    "related_references": ("关联引用",),
     "verification_status": ("验证状态",),
     "highlights": ("亮点",),
     "industry": ("行业类别",),

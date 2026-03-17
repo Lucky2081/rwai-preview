@@ -35,10 +35,25 @@ export function getBilibiliEmbedUrl(rawUrl: string): string | null {
     return null;
   }
 
+  const buildBilibiliMobileEmbedUrl = (params: { bvid?: string; aid?: string; cid?: string; page?: string }) => {
+    const embedUrl = new URL('https://www.bilibili.com/blackboard/html5mobileplayer.html');
+    if (params.bvid) embedUrl.searchParams.set('bvid', params.bvid);
+    if (params.aid) embedUrl.searchParams.set('aid', params.aid);
+    if (params.cid) embedUrl.searchParams.set('cid', params.cid);
+    embedUrl.searchParams.set('page', params.page || '1');
+    embedUrl.searchParams.set('autoplay', '1');
+    embedUrl.searchParams.set('muted', '1');
+    embedUrl.searchParams.set('loop', '1');
+    embedUrl.searchParams.set('danmaku', '0');
+    return embedUrl.toString();
+  };
+
   if (hostname === 'player.bilibili.com') {
-    parsed.searchParams.set('autoplay', '1');
-    parsed.searchParams.set('muted', '1');
-    return parsed.toString();
+    const bvid = parsed.searchParams.get('bvid')?.trim() || '';
+    const aid = parsed.searchParams.get('aid')?.trim() || '';
+    const cid = parsed.searchParams.get('cid')?.trim() || '';
+    const page = parsed.searchParams.get('page')?.trim() || parsed.searchParams.get('p')?.trim() || '1';
+    return buildBilibiliMobileEmbedUrl({ bvid, aid, cid, page });
   }
 
   const bvidFromQuery = parsed.searchParams.get('bvid')?.trim();
@@ -52,11 +67,11 @@ export function getBilibiliEmbedUrl(rawUrl: string): string | null {
   const aid = aidFromQuery || (pathAidMatch ? pathAidMatch[1] : '');
 
   if (bvid) {
-    return `https://player.bilibili.com/player.html?bvid=${encodeURIComponent(bvid)}&page=${encodeURIComponent(page)}&high_quality=1&as_wide=1&autoplay=1&muted=1`;
+    return buildBilibiliMobileEmbedUrl({ bvid, page });
   }
 
   if (aid) {
-    return `https://player.bilibili.com/player.html?aid=${encodeURIComponent(aid)}&page=${encodeURIComponent(page)}&high_quality=1&as_wide=1&autoplay=1&muted=1`;
+    return buildBilibiliMobileEmbedUrl({ aid, page });
   }
 
   return null;
@@ -113,6 +128,8 @@ export function getYouTubeEmbedUrl(rawUrl: string): string | null {
   const embedUrl = new URL(`https://www.youtube.com/embed/${encodeURIComponent(videoId)}`);
   embedUrl.searchParams.set('autoplay', '1');
   embedUrl.searchParams.set('mute', '1');
+  embedUrl.searchParams.set('loop', '1');
+  embedUrl.searchParams.set('playlist', videoId);
   embedUrl.searchParams.set('playsinline', '1');
   embedUrl.searchParams.set('rel', '0');
   embedUrl.searchParams.set('modestbranding', '1');

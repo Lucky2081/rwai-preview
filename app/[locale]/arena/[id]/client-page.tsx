@@ -290,7 +290,13 @@ export function ArenaDetailClient({ arena, locale, arenaId: _arenaId, initialCon
       return <OverviewSection arena={arena} content={content.overview} locale={locale} activeTab={activeTab} setActiveTab={(tab) => setActiveTab(tab as TabType)} />;
     }
     if (activeTab === 'implementation' && isTabContentReady(content.implementation)) {
-      return <ImplementationSection content={content.implementation!} locale={locale} />;
+      return (
+        <ImplementationSection
+          content={content.implementation!}
+          locale={locale}
+          relatedReferences={isChina ? arena.relatedReferences : (arena.relatedReferencesEn || arena.relatedReferences)}
+        />
+      );
     }
     if (activeTab === 'tech-configuration' && isTabContentReady(content['tech-configuration'])) {
       return <TechConfigurationSection content={content['tech-configuration']} locale={locale} />;
@@ -568,6 +574,7 @@ export function ArenaDetailClient({ arena, locale, arenaId: _arenaId, initialCon
                         ref={videoRef}
                         className="w-full h-full object-contain"
                         controls
+                        loop={false}
                         muted
                         preload="none"
                         playsInline
@@ -1872,7 +1879,15 @@ function OverviewSection({ arena, content, locale, activeTab, setActiveTab }: {
 }
 
 // Implementation Section Component - Phase-based card design
-function ImplementationSection({ content, locale }: { content: ArenaTabContent; locale: string }) {
+function ImplementationSection({
+  content,
+  locale,
+  relatedReferences,
+}: {
+  content: ArenaTabContent;
+  locale: string;
+  relatedReferences?: string;
+}) {
   const isChina = locale === 'zh';
 
   // Icon mapping for phases
@@ -1906,10 +1921,43 @@ function ImplementationSection({ content, locale }: { content: ArenaTabContent; 
   };
 
   // Parse implementation content into phases (supports both JSON phases and markdown format)
+  const parseRelatedReferences = (raw: string): string[] => {
+    return raw
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((line) => line.replace(/^[-•]\s*/, ''));
+  };
+
+  const appendRelatedReferencesPhase = (phases: PhaseType[]): PhaseType[] => {
+    const normalizedReferences = parseRelatedReferences(relatedReferences || '');
+    if (normalizedReferences.length === 0) return phases;
+
+    const maxPhaseNumber = phases.reduce((max, phase) => Math.max(max, phase.number), 0);
+    const relatedPhaseNumber = maxPhaseNumber + 1;
+
+    const relatedPhase: PhaseType = {
+      number: relatedPhaseNumber,
+      title: isChina ? '关联引用' : 'Related References',
+      icon: getPhaseIcon(relatedPhaseNumber),
+      subsections: [
+        {
+          title: isChina ? '相关资源' : 'Related Resources',
+          icon: '🔗',
+          content: normalizedReferences.map((item) => `- ${item}`),
+        },
+      ],
+    };
+
+    return [...phases, relatedPhase];
+  };
+
   const parseContent = (tabContent: ArenaTabContent): PhaseType[] => {
+    let phases: PhaseType[] = [];
+
     // If content is already in JSON phases format
     if (typeof tabContent === 'object' && Array.isArray(tabContent.phases)) {
-      return tabContent.phases.map((phase) => ({
+      phases = tabContent.phases.map((phase) => ({
         number: phase.number,
         title: phase.title,
         icon: getPhaseIcon(phase.number),
@@ -1919,74 +1967,73 @@ function ImplementationSection({ content, locale }: { content: ArenaTabContent; 
           content: sub.content,
         })),
       }));
-    }
+    } else {
+      // Fallback: parse markdown format
+      const text = typeof tabContent === 'string' ? tabContent : (typeof tabContent === 'object' && tabContent.markdown) ? tabContent.markdown : '';
+      if (!text) return appendRelatedReferencesPhase([]);
 
-    // Fallback: parse markdown format
-    const text = typeof tabContent === 'string' ? tabContent : (typeof tabContent === 'object' && tabContent.markdown) ? tabContent.markdown : '';
-    if (!text) return [];
+      const lines = text.split('\n');
 
-    const lines = text.split('\n');
-    const phases: PhaseType[] = [];
+      let currentPhase: PhaseType | null = null;
+      let currentSubsection: PhaseType['subsections'][0] | null = null;
 
-    let currentPhase: PhaseType | null = null;
-    let currentSubsection: PhaseType['subsections'][0] | null = null;
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
 
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i].trim();
+        // Skip empty lines and separators
+        if (!line || line === '---') continue;
 
-      // Skip empty lines and separators
-      if (!line || line === '---') continue;
+        // Detect phase headers (__PHASE X__)
+        const phaseMatch = line.match(/^__PHASE\s+(\d+)\s+(.+)__$/);
+        if (phaseMatch) {
+          if (currentPhase) {
+            if (currentSubsection) {
+              currentPhase.subsections.push(currentSubsection);
+            }
+            phases.push(currentPhase);
+          }
+          const phaseNum = parseInt(phaseMatch[1]);
+          currentPhase = {
+            number: phaseNum,
+            title: phaseMatch[2].trim(),
+            icon: getPhaseIcon(phaseNum),
+            subsections: []
+          };
+          currentSubsection = null;
+          continue;
+        }
 
-      // Detect phase headers (__PHASE X__)
-      const phaseMatch = line.match(/^__PHASE\s+(\d+)\s+(.+)__$/);
-      if (phaseMatch) {
-        if (currentPhase) {
+        // Detect subsection headers (__Title__)
+        const subsectionMatch = line.match(/^__(.+)__$/);
+        if (subsectionMatch && currentPhase) {
           if (currentSubsection) {
             currentPhase.subsections.push(currentSubsection);
           }
-          phases.push(currentPhase);
+          const title = subsectionMatch[1].trim();
+          currentSubsection = {
+            title,
+            icon: getSubsectionIcon(title),
+            content: []
+          };
+          continue;
         }
-        const phaseNum = parseInt(phaseMatch[1]);
-        currentPhase = {
-          number: phaseNum,
-          title: phaseMatch[2].trim(),
-          icon: getPhaseIcon(phaseNum),
-          subsections: []
-        };
-        currentSubsection = null;
-        continue;
+
+        // Add content to current subsection
+        if (currentPhase && currentSubsection && line) {
+          currentSubsection.content.push(line);
+        }
       }
 
-      // Detect subsection headers (__Title__)
-      const subsectionMatch = line.match(/^__(.+)__$/);
-      if (subsectionMatch && currentPhase) {
+      // Push last phase and subsection
+      if (currentPhase) {
         if (currentSubsection) {
           currentPhase.subsections.push(currentSubsection);
         }
-        const title = subsectionMatch[1].trim();
-        currentSubsection = {
-          title,
-          icon: getSubsectionIcon(title),
-          content: []
-        };
-        continue;
-      }
-
-      // Add content to current subsection
-      if (currentPhase && currentSubsection && line) {
-        currentSubsection.content.push(line);
+        phases.push(currentPhase);
       }
     }
 
-    // Push last phase and subsection
-    if (currentPhase) {
-      if (currentSubsection) {
-        currentPhase.subsections.push(currentSubsection);
-      }
-      phases.push(currentPhase);
-    }
-
-    return phases;
+    return appendRelatedReferencesPhase(phases);
   };
 
   const phases = parseContent(content);

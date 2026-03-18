@@ -108,7 +108,7 @@
     "arena_no": "8",
     "title": "Intelligent Contract Legal Review System Demo",
     "champion": "Private Deployment: BISHENG",
-    "related_references": "",
+    "related_references": "BISHENG GitHub：https://github.com/dataelement/bisheng",
     "verification_status": "In Verification",
     "highlights": "Build an intelligent contract legal review system demo with element extraction, cross-contract validation, configurability, and traceability in one day",
     "industry": "Finance & Trade",

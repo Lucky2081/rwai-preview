@@ -22,7 +22,7 @@ Neuralforecast （by Nixtla） GitHub: https://github.com/Nixtla/neuralforecast
 ETT数据集SOTA 模型：https://arxiv.org/pdf/2510.23396",已验证,一周用低代码快速构建并验证一个面向能源领域的长时间序列预测系统Demo,能源制造,"运营, 风控",一周,中等,较高,较优,寻找攻擂者,,,,
 7,智能文档翻译系统,私部署版：Gemini CLI + Gemini 3.1 Pro,"Gemini CLI(by Google) GitHub：https://github.com/google-gemini/gemini-cli
 Gemini 3.1 Pro(by Google) 官网：https://deepmind.google/models/gemini/pro/",已验证,一周快速构建1个智能文档翻译Demo,通用,"服务, 运营, 管理",一周,中等,较高,较优,寻找攻擂者,,,,
-8,智能合同法审系统,私部署版：BISHENG,,验证中,一天搭建出基于要素抽取与跨合同规则校验、可配置与溯源的智能合同法审系统Demo,金融贸易,风控,1~2天,中等,较高,较优,寻找攻擂者,,,,
+8,智能合同法审系统,私部署版：BISHENG,BISHENG GitHub：https://github.com/dataelement/bisheng,验证中,一天搭建出基于要素抽取与跨合同规则校验、可配置与溯源的智能合同法审系统Demo,金融贸易,风控,1~2天,中等,较高,较优,寻找攻擂者,,,,
 9,通用目标检测系统,私部署版：Ultralytics YOLO （YOLO 11）+ Triton + Perf Analyzer,"Ultralytics YOLO （by Ultralytics） : https://docs.ultralytics.com/models/yolo11/
 Triton （by NVIDIA） GitHub : https://github.com/triton-inference-server/server/blob/main/docs/user_guide/model_configuration.md
 Perf Analyzer （by NVIDIA） GitHub: https://github.com/triton-inference-server/perf_analyzer",验证中,一周构建1个高精度、含数据流闭环、具备自进化能力的通用目标检测系统Demo,"信息技术, 能源制造, 农林牧渔","运营, 管理, 风控",一周,中等,较高,较优,寻找攻擂者,,,,

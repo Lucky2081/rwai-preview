@@ -108,7 +108,7 @@
     "arena_no": "8",
     "title": "智能合同法审系统",
     "champion": "私部署版：BISHENG",
-    "related_references": "",
+    "related_references": "BISHENG GitHub：https://github.com/dataelement/bisheng",
     "verification_status": "验证中",
     "highlights": "一天搭建出基于要素抽取与跨合同规则校验、可配置与溯源的智能合同法审系统Demo",
     "industry": "金融贸易",

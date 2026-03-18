@@ -194,6 +194,34 @@ function getNormalizedDependencies(stackText: string): string {
   return uniqueParts.length > 0 ? uniqueParts.join(' · ') : 'N/A';
 }
 
+type RelatedReferenceItem = {
+  label: string;
+  href: string;
+};
+
+function parseRelatedReferencesWithLinks(raw: string | undefined): RelatedReferenceItem[] {
+  if (!raw) return [];
+
+  const items = raw
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => line.replace(/^[-•]\s*/, ''));
+
+  return items
+    .map((line) => {
+      const urlMatch = line.match(/https?:\/\/\S+/i);
+      if (!urlMatch) return null;
+
+      const href = urlMatch[0].replace(/[),.;，。；]+$/, '');
+      const rawLabel = line.slice(0, urlMatch.index).replace(/[:：]\s*$/, '').trim();
+      const label = rawLabel || href;
+
+      return { label, href };
+    })
+    .filter((item): item is RelatedReferenceItem => item !== null);
+}
+
 interface ArenaDetailClientProps {
   arena: Arena;
   locale: string;
@@ -294,7 +322,6 @@ export function ArenaDetailClient({ arena, locale, arenaId: _arenaId, initialCon
         <ImplementationSection
           content={content.implementation!}
           locale={locale}
-          relatedReferences={isChina ? arena.relatedReferences : (arena.relatedReferencesEn || arena.relatedReferences)}
         />
       );
     }
@@ -1388,6 +1415,9 @@ function OverviewSection({ arena, content, locale, activeTab, setActiveTab }: {
     const firstReleased = metadata['firstReleased'] || '-';
     const lastUpdated = metadata['lastUpdated'] || '-';
 
+    const dependencyReferences = parseRelatedReferencesWithLinks(
+      isChina ? arena.relatedReferences : (arena.relatedReferencesEn || arena.relatedReferences)
+    );
     const dependencies = getNormalizedDependencies(isChina ? arena.champion : arena.championEn);
 
     // Extract implementation link
@@ -1496,7 +1526,23 @@ function OverviewSection({ arena, content, locale, activeTab, setActiveTab }: {
                   </div>
                     <div className="flex-1">
                       <div className="text-xs text-gray-500 mb-0.5">{isChina ? '关键依赖' : 'Dependencies'}</div>
-                    <div className="text-sm text-gray-900">{dependencies}</div>
+                    {dependencyReferences.length > 0 ? (
+                      <div className="space-y-1.5 pt-0.5">
+                        {dependencyReferences.map((item, idx) => (
+                          <a
+                            key={`${item.href}-${idx}`}
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block text-sm text-gray-900 hover:text-blue-700 hover:underline underline-offset-2 leading-relaxed"
+                          >
+                            {item.label}
+                          </a>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-sm text-gray-900">{dependencies}</div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -1882,11 +1928,9 @@ function OverviewSection({ arena, content, locale, activeTab, setActiveTab }: {
 function ImplementationSection({
   content,
   locale,
-  relatedReferences,
 }: {
   content: ArenaTabContent;
   locale: string;
-  relatedReferences?: string;
 }) {
   const isChina = locale === 'zh';
 
@@ -1920,38 +1964,6 @@ function ImplementationSection({
     }>;
   };
 
-  // Parse implementation content into phases (supports both JSON phases and markdown format)
-  const parseRelatedReferences = (raw: string): string[] => {
-    return raw
-      .split('\n')
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .map((line) => line.replace(/^[-•]\s*/, ''));
-  };
-
-  const appendRelatedReferencesPhase = (phases: PhaseType[]): PhaseType[] => {
-    const normalizedReferences = parseRelatedReferences(relatedReferences || '');
-    if (normalizedReferences.length === 0) return phases;
-
-    const maxPhaseNumber = phases.reduce((max, phase) => Math.max(max, phase.number), 0);
-    const relatedPhaseNumber = maxPhaseNumber + 1;
-
-    const relatedPhase: PhaseType = {
-      number: relatedPhaseNumber,
-      title: isChina ? '关联引用' : 'Related References',
-      icon: getPhaseIcon(relatedPhaseNumber),
-      subsections: [
-        {
-          title: isChina ? '相关资源' : 'Related Resources',
-          icon: '🔗',
-          content: normalizedReferences.map((item) => `- ${item}`),
-        },
-      ],
-    };
-
-    return [...phases, relatedPhase];
-  };
-
   const parseContent = (tabContent: ArenaTabContent): PhaseType[] => {
     let phases: PhaseType[] = [];
 
@@ -1970,7 +1982,7 @@ function ImplementationSection({
     } else {
       // Fallback: parse markdown format
       const text = typeof tabContent === 'string' ? tabContent : (typeof tabContent === 'object' && tabContent.markdown) ? tabContent.markdown : '';
-      if (!text) return appendRelatedReferencesPhase([]);
+      if (!text) return [];
 
       const lines = text.split('\n');
 
@@ -2033,7 +2045,7 @@ function ImplementationSection({
       }
     }
 
-    return appendRelatedReferencesPhase(phases);
+    return phases;
   };
 
   const phases = parseContent(content);

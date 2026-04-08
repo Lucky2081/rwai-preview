@@ -1,4 +1,5 @@
 name: Deploy Static Site
+
 on:
   workflow_dispatch:
   push:
@@ -29,11 +30,18 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Set Base Path for Custom Domain
+      - name: Resolve base path for GitHub Pages
         run: |
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          OWNER_SITE="${GITHUB_REPOSITORY_OWNER}.github.io"
           echo "STATIC_EXPORT=1" >> "$GITHUB_ENV"
-          echo "NEXT_BASE_PATH=" >> "$GITHUB_ENV"
-          echo "NEXT_PUBLIC_BASE_PATH=" >> "$GITHUB_ENV"
+          if [ "$REPO_NAME" = "$OWNER_SITE" ]; then
+            echo "NEXT_BASE_PATH=" >> "$GITHUB_ENV"
+            echo "NEXT_PUBLIC_BASE_PATH=" >> "$GITHUB_ENV"
+          else
+            echo "NEXT_BASE_PATH=/$REPO_NAME" >> "$GITHUB_ENV"
+            echo "NEXT_PUBLIC_BASE_PATH=/$REPO_NAME" >> "$GITHUB_ENV"
+          fi
 
       - name: Install dependencies
         run: npm ci
@@ -44,9 +52,12 @@ jobs:
       - name: Build static site
         run: npm run build
 
-      - name: Add CNAME and NoJekyll
+      - name: Validate exported arena content
         run: |
-          touch out/.nojekyll
+          node -e "const fs=require('fs'); const p='public/data/arena-content.json'; if(!fs.existsSync(p)){throw new Error('missing '+p);} const d=JSON.parse(fs.readFileSync(p,'utf8')); const ids=Object.keys(d); const full=ids.filter(id=>{const zh=d[id]?.zh||{}; return zh.overview&&zh.implementation&&zh['tech-configuration'];}); console.log('arena total=',ids.length,'full zh tabs=',full.length); if(full.length<3){throw new Error('too few arenas with full tab content: '+full.length);}"
+
+      - name: Disable Jekyll
+        run: touch out/.nojekyll
 
       - name: Upload static artifact
         uses: actions/upload-pages-artifact@v3
@@ -58,6 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment

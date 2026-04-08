@@ -46,7 +46,6 @@ jobs:
 
       - name: Add CNAME and NoJekyll
         run: |
-          echo "page-preview.org" > out/CNAME
           touch out/.nojekyll
 
       - name: Upload static artifact

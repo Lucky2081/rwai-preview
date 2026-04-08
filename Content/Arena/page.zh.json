@@ -12,7 +12,7 @@
     "quality": "较高",
     "security": "较高",
     "cost": "较优",
-    "challenger": "私部署版：Claude Code +Kimi K2.5/Minimax M2.5/Qwen 3.5 + Metaso"
+    "challenger": "私部署版：Claude Code +Kimi K2.5/Minimax M2.7/Qwen 3.6/GLM 5.1 + Metaso"
   },
   {
     "arena_no": "2",
@@ -27,7 +27,7 @@
     "quality": "很高",
     "security": "较低",
     "cost": "较优",
-    "challenger": "云端版：Lovable + GLM-5/Minimax M2.5/Qwen 3.5 + Claude Code"
+    "challenger": "云端版：Lovable + GLM 5.1/Minimax M2.7/Qwen 3.6 + Claude Code"
   },
   {
     "arena_no": "3",
@@ -42,7 +42,7 @@
     "quality": "较高",
     "security": "较高",
     "cost": "较优",
-    "challenger": "私部署版：LangChain + Kimi K2.5/Minimax M2.5/Qwen 3.5  + Pydantic + unstructured + Faiss"
+    "challenger": "私部署版：LangChain + Kimi K2.5/Minimax M2.7/Qwen 3.6  + Pydantic + unstructured + Faiss"
   },
   {
     "arena_no": "4",
@@ -72,7 +72,7 @@
     "quality": "中等",
     "security": "较高",
     "cost": "较优",
-    "challenger": "私部署版：BISHENG + Kimi K2.5/Minimax M2.5/Qwen 3.5"
+    "challenger": "私部署版：BISHENG + Kimi K2.5/Minimax M2.7/Qwen 3.6/GLM 5.1"
   },
   {
     "arena_no": "6",
@@ -162,7 +162,7 @@
     "quality": "较低",
     "security": "较高",
     "cost": "较优",
-    "challenger": "私部署版：Coze + Kimi K2.5/Minimax M2.5/Qwen 3.5"
+    "challenger": "私部署版：Coze + Kimi K2.5/Minimax M2.7/Qwen 3.6"
   },
   {
     "arena_no": "12",
@@ -177,7 +177,7 @@
     "quality": "中等",
     "security": "较高",
     "cost": "较优",
-    "challenger": "私部署版：LangChain + Kimi K2.5/GLM-5/Minimax M2.5/Qwen 3.5  + Pydantic + unstructured + Faiss"
+    "challenger": "私部署版：LangChain + Kimi K2.5/GLM 5.1/Minimax M2.7/Qwen 3.6  + Pydantic + unstructured + Faiss"
   },
   {
     "arena_no": "13",
@@ -192,6 +192,6 @@
     "quality": "中等",
     "security": "较高",
     "cost": "较优",
-    "challenger": "私部署版：LangChain + Kimi K2.5/Minimax M2.5/Qwen 3.5  + Pydantic + unstructured + Faiss"
+    "challenger": "私部署版：LangChain + Kimi K2.5/Minimax M2.7/Qwen 3.6  + Pydantic + unstructured + Faiss"
   }
 ]

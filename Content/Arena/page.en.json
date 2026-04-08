@@ -12,7 +12,7 @@
     "quality": "Relatively High",
     "security": "Relatively High",
     "cost": "Optimal",
-    "challenger": "Private Deployment: Claude Code +Kimi K2.5/Minimax M2.5/Qwen 3.5 + Metaso"
+    "challenger": "Private Deployment: Claude Code +Kimi K2.5/Minimax M2.7/Qwen 3.6/GLM 5.1 + Metaso"
   },
   {
     "arena_no": "2",
@@ -27,7 +27,7 @@
     "quality": "Very High",
     "security": "Relatively Low",
     "cost": "Optimal",
-    "challenger": "Cloud Version: Lovable + GLM-5/Minimax M2.5/Qwen 3.5 + Claude Code"
+    "challenger": "Cloud Version: Lovable + GLM 5.1/Minimax M2.7/Qwen 3.6 + Claude Code"
   },
   {
     "arena_no": "3",
@@ -42,7 +42,7 @@
     "quality": "Relatively High",
     "security": "Relatively High",
     "cost": "Optimal",
-    "challenger": "Private Deployment: LangChain + Kimi K2.5/Minimax M2.5/Qwen 3.5  + Pydantic + unstructured + Faiss"
+    "challenger": "Private Deployment: LangChain + Kimi K2.5/Minimax M2.7/Qwen 3.6  + Pydantic + unstructured + Faiss"
   },
   {
     "arena_no": "4",
@@ -72,7 +72,7 @@
     "quality": "Medium",
     "security": "Relatively High",
     "cost": "Optimal",
-    "challenger": "Private Deployment: BISHENG + Kimi K2.5/Minimax M2.5/Qwen 3.5"
+    "challenger": "Private Deployment: BISHENG + Kimi K2.5/Minimax M2.7/Qwen 3.6/GLM 5.1"
   },
   {
     "arena_no": "6",
@@ -162,7 +162,7 @@
     "quality": "Relatively Low",
     "security": "Relatively High",
     "cost": "Optimal",
-    "challenger": "Private Deployment: Coze + Kimi K2.5/Minimax M2.5/Qwen 3.5"
+    "challenger": "Private Deployment: Coze + Kimi K2.5/Minimax M2.7/Qwen 3.6"
   },
   {
     "arena_no": "12",
@@ -177,7 +177,7 @@
     "quality": "Medium",
     "security": "Relatively High",
     "cost": "Optimal",
-    "challenger": "Private Deployment: LangChain + Kimi K2.5/GLM-5/Minimax M2.5/Qwen 3.5  + Pydantic + unstructured + Faiss"
+    "challenger": "Private Deployment: LangChain + Kimi K2.5/GLM 5.1/Minimax M2.7/Qwen 3.6  + Pydantic + unstructured + Faiss"
   },
   {
     "arena_no": "13",
@@ -192,6 +192,6 @@
     "quality": "Medium",
     "security": "Relatively High",
     "cost": "Optimal",
-    "challenger": "Private Deployment: LangChain + Kimi K2.5/Minimax M2.5/Qwen 3.5  + Pydantic + unstructured + Faiss"
+    "challenger": "Private Deployment: LangChain + Kimi K2.5/Minimax M2.7/Qwen 3.6  + Pydantic + unstructured + Faiss"
   }
 ]

@@ -12,7 +12,7 @@
     "quality": "Relatively High",
     "security": "Relatively High",
     "cost": "Optimal",
-    "challenger": "Private Deployment: Claude Code +Kimi K2.5/Minimax M2.7/Qwen 3.6/GLM 5.1 + Metaso"
+    "challenger": "Private Deployment: Claude Code + DeepSeek V4 Pro/MiMo V2.5 Pro/GLM 5.1/Kimi K2.6/Qwen 3.6 + Metaso"
   },
   {
     "arena_no": "2",
@@ -27,7 +27,7 @@
     "quality": "Very High",
     "security": "Relatively Low",
     "cost": "Optimal",
-    "challenger": "Cloud Version: Lovable + GLM 5.1/Minimax M2.7/Qwen 3.6 + Claude Code"
+    "challenger": "Cloud Version: Lovable + DeepSeek V4 Pro/GLM 5.1/Kimi K2.6/Qwen 3.6/Minimax M2.7 + Claude Code"
   },
   {
     "arena_no": "3",
@@ -42,7 +42,7 @@
     "quality": "Relatively High",
     "security": "Relatively High",
     "cost": "Optimal",
-    "challenger": "Private Deployment: LangChain + Kimi K2.5/Minimax M2.7/Qwen 3.6  + Pydantic + unstructured + Faiss"
+    "challenger": "Private Deployment: LangChain + DeepSeek V4 Pro/GLM 5.1/Kimi K2.6/Minimax M2.7/Qwen 3.6  + Pydantic + unstructured + Faiss"
   },
   {
     "arena_no": "4",
@@ -57,7 +57,7 @@
     "quality": "Medium",
     "security": "Relatively High",
     "cost": "Optimal",
-    "challenger": "Private Deployment: OpenClaw + Claude Opus 4.6  + FFmpeg + Qwen3-ASR + Qwen3-TTS"
+    "challenger": "Private Deployment: OpenClaw + DeepSeek V4 Pro/MiMo V2.5 Pro/GLM 5.1/Kimi K2.6/Qwen 3.6  + FFmpeg + Qwen3-ASR + Qwen3-TTS"
   },
   {
     "arena_no": "5",
@@ -72,7 +72,7 @@
     "quality": "Medium",
     "security": "Relatively High",
     "cost": "Optimal",
-    "challenger": "Private Deployment: BISHENG + Kimi K2.5/Minimax M2.7/Qwen 3.6/GLM 5.1"
+    "challenger": "Private Deployment: BISHENG + DeepSeek V4 Pro/GLM 5.1/Kimi K2.6/Qwen 3.6/Minimax M2.7"
   },
   {
     "arena_no": "6",
@@ -102,7 +102,7 @@
     "quality": "Medium",
     "security": "Relatively High",
     "cost": "Optimal",
-    "challenger": "Looking for Challengers"
+    "challenger": "Private Deployment: Claude Code + DeepSeek V4 Pro/MiMo V2.5 Pro/GLM 5.1/Kimi K2.6/Qwen 3.6"
   },
   {
     "arena_no": "8",
@@ -162,7 +162,7 @@
     "quality": "Relatively Low",
     "security": "Relatively High",
     "cost": "Optimal",
-    "challenger": "Private Deployment: Coze + Kimi K2.5/Minimax M2.7/Qwen 3.6"
+    "challenger": "Private Deployment: Coze +  DeepSeek V4 Pro/GLM 5.1/Kimi K2.6/Minimax M2.7/Qwen 3.6"
   },
   {
     "arena_no": "12",
@@ -177,7 +177,7 @@
     "quality": "Medium",
     "security": "Relatively High",
     "cost": "Optimal",
-    "challenger": "Private Deployment: LangChain + Kimi K2.5/GLM 5.1/Minimax M2.7/Qwen 3.6  + Pydantic + unstructured + Faiss"
+    "challenger": "Private Deployment: LangChain +  DeepSeek V4 Pro/GLM 5.1/Kimi K2.6/Minimax M2.7/Qwen 3.6  + Pydantic + unstructured + Faiss"
   },
   {
     "arena_no": "13",
@@ -192,6 +192,6 @@
     "quality": "Medium",
     "security": "Relatively High",
     "cost": "Optimal",
-    "challenger": "Private Deployment: LangChain + Kimi K2.5/Minimax M2.7/Qwen 3.6  + Pydantic + unstructured + Faiss"
+    "challenger": "Private Deployment: LangChain +  DeepSeek V4 Pro/GLM 5.1/Kimi K2.6/Minimax M2.7/Qwen 3.6  + Pydantic + unstructured + Faiss"
   }
 ]

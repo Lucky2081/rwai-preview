@@ -76,11 +76,6 @@ export function Footer() {
             <h4 className="text-sm font-semibold text-text-primary mb-4">{t('legal')}</h4>
             <ul className="space-y-2">
               <li>
-                <a href={withBasePath(`/${locale}/privacy`)} className="text-sm text-text-secondary hover:text-primary transition-colors">
-                  {t('privacy')}
-                </a>
-              </li>
-              <li>
                 <a href={withBasePath(`/${locale}/terms`)} className="text-sm text-text-secondary hover:text-primary transition-colors">
                   {t('terms')}
                 </a>

@@ -154,4 +154,3 @@ diff Content/Homepage/hero.raw.md Content/Homepage/hero.zh.md
 **Last Updated**: 2025-01-29
 **Version**: 2.0
 **Status**: ✅ All content synced across website
-
